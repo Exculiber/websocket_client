@@ -1,0 +1,18 @@
+WebSocket 探测工具 - Windows 版本
+
+🚀 快速开始:
+  ./websocket-probe-windows-amd64.exe wss://echo.websocket.org
+
+📖 查看帮助:
+  ./websocket-probe-windows-amd64.exe --help
+
+🎮 交互式模式:
+  ./websocket-probe-windows-amd64.exe wss://your-server/ws --mode interactive
+
+🔧 跳过SSL验证:
+  ./websocket-probe-windows-amd64.exe wss://192.168.1.100/ws --skip-ssl-verify
+
+🔍 调试模式:
+  ./websocket-probe-windows-amd64.exe wss://your-server/ws --debug
+
+📋 更多信息请参考 README.md 文件
