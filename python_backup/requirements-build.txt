@@ -1,8 +1,0 @@
-# 用于二进制打包的依赖包
-websockets>=11.0.3
-python-socks>=2.0.3
-aiohttp>=3.8.0
-pyinstaller>=5.0.0
-
-# 可选优化包
-upx  # 二进制文件压缩（可选）

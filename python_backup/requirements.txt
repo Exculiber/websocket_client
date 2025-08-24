@@ -1,9 +1,0 @@
-# WebSocket 探测工具依赖包
-websockets>=11.0.3
-python-socks>=2.0.3
-aiohttp>=3.8.0
-
-# 可选依赖（用于高级功能）
-# aiohttp>=3.8.0  # 如果需要 HTTP 请求功能
-# colorama>=0.4.0  # 如果需要彩色输出
-# click>=8.0.0     # 如果需要更复杂的命令行界面
