@@ -1,0 +1,103 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to build'
+        required: true
+        default: '1.0.0'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+        exclude:
+          - os: windows-latest
+            python-version: '3.8'
+          - os: macos-latest
+            python-version: '3.8'
+
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+
+    - name: Run tests
+      run: |
+        cd tests
+        python -m pytest test_probe.py -v
+        python -m pytest test_compatibility.py -v
+
+    - name: Build binary
+      run: |
+        cd scripts
+        if [ "${{ runner.os }}" = "Windows" ]; then
+          python build_binary.py
+        elif [ "${{ runner.os }}" = "macOS" ]; then
+          python build_binary.py
+        else
+          python build_binary.py
+        fi
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: websocket-probe-${{ matrix.os }}-${{ matrix.python-version }}
+        path: |
+          dist/
+          build/
+        retention-days: 30
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: artifacts
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.ref_name }}
+        name: Release ${{ github.ref_name }}
+        body: |
+          ## WebSocket Probe Tool ${{ github.ref_name }}
+          
+          ### Changes
+          - Automated build for multiple platforms
+          - Python versions: 3.8, 3.9, 3.10, 3.11
+          - Operating systems: Windows, macOS, Linux
+          
+          ### Downloads
+          Check the artifacts above for your platform.
+          
+        draft: false
+        prerelease: false
+        files: artifacts/**/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
