@@ -65,8 +65,7 @@ jobs:
         python tests/test_compatibility.py
 
     - name: Build binary
-      working-directory: scripts
-      run: python build_binary.py
+      run: python scripts/build_binary.py
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
