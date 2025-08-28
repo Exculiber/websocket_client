@@ -171,13 +171,15 @@ def build_binary():
     cmd = [
         sys.executable, '-m', 'PyInstaller',
         '--clean',
+        '--noconfirm',
         spec_file
     ]
     
     print(f"🚀 执行命令: {' '.join(cmd)}")
     
     try:
-        result = subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        # 直接将 PyInstaller 的输出流到控制台，避免 CI 因长时间无输出而取消
+        result = subprocess.run(cmd, check=True)
         print("✅ 构建成功！")
         
         # 显示构建结果
@@ -198,8 +200,6 @@ def build_binary():
             
     except subprocess.CalledProcessError as e:
         print(f"❌ 构建失败: {e}")
-        if hasattr(e, 'stderr') and e.stderr:
-            print(f"错误输出: {e.stderr}")
         return None
 
 def test_binary(binary_path):
