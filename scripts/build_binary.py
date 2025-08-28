@@ -81,7 +81,7 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        ('config_example.json', '.'),
+        ('examples/config_example.json', '.'),
         ('requirements.txt', '.'),
     ],
     hiddenimports=[
@@ -253,7 +253,7 @@ def create_release_package():
     # 复制文件
     shutil.copy2(binary_path, release_dir)
     shutil.copy2('README.md', release_dir)
-    shutil.copy2('config_example.json', release_dir)
+    shutil.copy2('examples/config_example.json', release_dir)
     
     # 创建使用说明
     usage_file = os.path.join(release_dir, 'USAGE.txt')
