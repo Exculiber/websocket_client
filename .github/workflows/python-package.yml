@@ -37,8 +37,8 @@ jobs:
     - name: Run tests
       run: |
         cd tests
-        python -m pytest test_probe.py -v
-        python -m pytest test_compatibility.py -v
+        python test_probe.py
+        python test_compatibility.py
     
     - name: Build package
       run: python -m build
