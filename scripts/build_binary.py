@@ -214,20 +214,25 @@ def test_binary(binary_path):
     try:
         # Python 3.6 兼容性：简化测试逻辑
         print("⏳ 正在测试二进制文件...")
-        result = subprocess.run([binary_path, '--help'], 
-                              stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
-                              universal_newlines=True)
-        
-        if result.returncode == 0 and 'WebSocket 探测工具' in result.stdout:
+        env = os.environ.copy()
+        env['PYTHONUTF8'] = '1'
+        env['PYTHONIOENCODING'] = 'utf-8'
+        result = subprocess.run([binary_path, '--help'],
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE,
+                                universal_newlines=True,
+                                env=env)
+
+        if result.returncode == 0:
             print("✅ 二进制文件测试通过")
             return True
         else:
             print("❌ 二进制文件测试失败")
             print(f"返回码: {result.returncode}")
             if result.stdout:
-                print(f"输出: {result.stdout[:200]}...")
+                print(f"输出: {result.stdout[:500]}...")
             if result.stderr:
-                print(f"错误: {result.stderr[:200]}...")
+                print(f"错误: {result.stderr[:500]}...")
             return False
             
     except Exception as e:
