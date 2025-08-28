@@ -61,9 +61,8 @@ jobs:
 
     - name: Run tests
       run: |
-        cd tests
-        python test_probe.py
-        python test_compatibility.py
+        python tests/test_probe.py
+        python tests/test_compatibility.py
 
     - name: Build binary
       working-directory: scripts
