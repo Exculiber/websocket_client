@@ -76,7 +76,7 @@ python python/websocket_probe.py ws://localhost:8080/ws
 python python/websocket_probe.py ws://localhost:8080/ws --message "Hello WebSocket!"
 
 # 连接到安全的 WebSocket (WSS)
-python python/websocket_probe.py wss://echo.websocket.org
+python python/websocket_probe.py wss://echo.websocket.org/
 ```
 
 ### 探测模式
@@ -175,7 +175,7 @@ python websocket_probe.py ws://localhost:8080/ws \
 #### 测试公共 WebSocket 服务
 ```bash
 # 测试 WebSocket Echo 服务
-python websocket_probe.py wss://echo.websocket.org --message "Hello Echo!"
+python websocket_probe.py wss://echo.websocket.org/ --message "Hello Echo!"
 
 # 测试 WebSocket King 服务
 python websocket_probe.py wss://websocket.king --message "ping"

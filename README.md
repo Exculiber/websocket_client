@@ -36,22 +36,22 @@ websocket-probe/
 pip install -r requirements.txt
 
 # 基础测试
-python3 websocket_probe.py wss://echo.websocket.org
+python3 websocket_probe.py wss://echo.websocket.org/
 
 # 压力测试
-python3 websocket_probe.py wss://echo.websocket.org --mode stress --count 10
+python3 websocket_probe.py wss://echo.websocket.org/ --mode stress --count 10
 ```
 
 ### 预编译二进制版本（推荐）
 ```bash
 # macOS ARM64
-./releases/v1.0.0/websocket-probe-macos-arm64 wss://echo.websocket.org
+./releases/v1.0.0/websocket-probe-macos-arm64 wss://echo.websocket.org/
 
 # Linux x86_64
-./releases/v1.0.0/websocket-probe-linux-x86_64 wss://echo.websocket.org
+./releases/v1.0.0/websocket-probe-linux-x86_64 wss://echo.websocket.org/
 
 # Linux aarch64
-./releases/v1.0.0/websocket-probe-linux-aarch64 wss://echo.websocket.org
+./releases/v1.0.0/websocket-probe-linux-aarch64 wss://echo.websocket.org/
 ```
 
 ## 🎯 功能特性
@@ -108,7 +108,7 @@ python3 websocket_probe.py wss://192.168.1.100:8080/ws --skip-ssl-verify
 python3 websocket_probe.py wss://your-api.com/ws --mode continuous --interval 30
 
 # 压力测试
-python3 websocket_probe.py wss://echo.websocket.org --mode stress --count 50 --concurrency 10
+python3 websocket_probe.py wss://echo.websocket.org/ --mode stress --count 50 --concurrency 10
 
 # 查看帮助
 python3 websocket_probe.py --help

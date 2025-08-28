@@ -25,10 +25,10 @@ chmod +x websocket-probe-macos-arm64
 ### 3. 运行工具
 ```bash
 # macOS/Linux
-./websocket-probe-macos-arm64 wss://echo.websocket.org
+./websocket-probe-macos-arm64 wss://echo.websocket.org/
 
 # Windows
-websocket-probe-windows-amd64.exe wss://echo.websocket.org
+websocket-probe-windows-amd64.exe wss://echo.websocket.org/
 ```
 
 ## 🔧 功能特性
