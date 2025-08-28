@@ -34,18 +34,23 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install UPX (optional)
-      if: always()
+    - name: Install UPX (Linux, optional)
+      if: runner.os == 'Linux'
       run: |
-        if [ "${{ runner.os }}" = "Linux" ]; then
-          sudo apt-get update -y || true
-          sudo apt-get install -y upx || true
-        elif [ "${{ runner.os }}" = "macOS" ]; then
-          brew update || true
-          brew install upx || true
-        else
-          choco install upx -y || true
-        fi
+        sudo apt-get update -y || true
+        sudo apt-get install -y upx || true
+
+    - name: Install UPX (macOS, optional)
+      if: runner.os == 'macOS'
+      run: |
+        brew update || true
+        brew install upx || true
+
+    - name: Install UPX (Windows, optional)
+      if: runner.os == 'Windows'
+      shell: powershell
+      run: |
+        choco install upx -y || $true
 
     - name: Install dependencies
       run: |
@@ -60,15 +65,8 @@ jobs:
         python -m pytest test_compatibility.py -v
 
     - name: Build binary
-      run: |
-        cd scripts
-        if [ "${{ runner.os }}" = "Windows" ]; then
-          python build_binary.py
-        elif [ "${{ runner.os }}" = "macOS" ]; then
-          python build_binary.py
-        else
-          python build_binary.py
-        fi
+      working-directory: scripts
+      run: python build_binary.py
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4

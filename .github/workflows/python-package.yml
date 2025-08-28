@@ -21,7 +21,8 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     
-    - name: Install UPX (optional)
+    - name: Install UPX (Ubuntu, optional)
+      if: runner.os == 'Linux'
       run: |
         sudo apt-get update -y || true
         sudo apt-get install -y upx || true
