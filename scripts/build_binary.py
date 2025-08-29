@@ -293,6 +293,19 @@ def create_release_package(binary_path=None):
         platform_name, machine, ext = get_platform_info()
         binary_name = f'websocket-probe-{platform_name}-{machine}{ext}'
         binary_path = os.path.join('dist', binary_name)
+    else:
+        # 从 binary_path 推断平台信息
+        if binary_path.endswith('.exe'):
+            platform_name = 'windows'
+            machine = 'amd64'
+        elif 'linux' in binary_path:
+            platform_name = 'linux'
+            machine = 'x86_64'
+        elif 'macos' in binary_path or 'darwin' in binary_path:
+            platform_name = 'macos'
+            machine = 'x86_64'
+        else:
+            platform_name, machine, ext = get_platform_info()
     
     if not os.path.exists(binary_path):
         print("❌ 二进制文件不存在，无法创建发布包")
