@@ -324,23 +324,24 @@ def create_release_package(binary_path=None):
     
     # 创建使用说明
     usage_file = os.path.join(release_dir, 'USAGE.txt')
+    binary_filename = os.path.basename(binary_path)
     with open(usage_file, 'w', encoding='utf-8') as f:
         f.write(f"""WebSocket 探测工具 - {platform_name.title()} 版本
 
 🚀 快速开始:
-  ./{binary_name} wss://echo.websocket.org
+  ./{binary_filename} wss://echo.websocket.org
 
 📖 查看帮助:
-  ./{binary_name} --help
+  ./{binary_filename} --help
 
 🎮 交互式模式:
-  ./{binary_name} wss://your-server/ws --mode interactive
+  ./{binary_filename} wss://your-server/ws --mode interactive
 
 🔧 跳过SSL验证:
-  ./{binary_name} wss://192.168.1.100/ws --skip-ssl-verify
+  ./{binary_filename} wss://192.168.1.100/ws --skip-ssl-verify
 
 🔍 调试模式:
-  ./{binary_name} wss://your-server/ws --debug
+  ./{binary_filename} wss://your-server/ws --debug
 
 📋 更多信息请参考 README.md 文件
 """)
