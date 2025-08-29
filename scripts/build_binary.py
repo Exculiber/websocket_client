@@ -135,7 +135,7 @@ exe = EXE(
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=True,
+    upx=False,
     upx_exclude=[],
     runtime_tmpdir=None,
     console=True,
@@ -175,6 +175,10 @@ def build_binary():
         '--noconfirm',
         spec_file
     ]
+
+    # Windows 平台禁用 UPX，避免打包缓慢或被杀毒误报导致卡住
+    if platform.system().lower() == 'windows':
+        cmd.insert(3, '--noupx')
     
     print(f"🚀 执行命令: {' '.join(cmd)}")
     
