@@ -184,7 +184,7 @@ def build_binary():
     
     try:
         # 直接将 PyInstaller 的输出流到控制台，避免 CI 因长时间无输出而取消
-        result = subprocess.run(cmd, check=True)
+        result = subprocess.run(cmd, check=True, capture_output=False)
         print("✅ 构建成功！")
         
         # 显示构建结果
@@ -205,6 +205,25 @@ def build_binary():
             
     except subprocess.CalledProcessError as e:
         print(f"❌ 构建失败: {e}")
+        
+        # Windows 下尝试不使用 spec 文件直接构建
+        if platform.system().lower() == 'windows':
+            print("🔄 Windows 环境：尝试不使用 spec 文件直接构建...")
+            try:
+                fallback_cmd = [
+                    sys.executable, '-m', 'PyInstaller',
+                    '--onefile',
+                    '--clean',
+                    '--noconfirm',
+                    'websocket_probe.py'
+                ]
+                print(f"🚀 备用命令: {' '.join(fallback_cmd)}")
+                result = subprocess.run(fallback_cmd, check=True, capture_output=False)
+                print("✅ 备用构建成功！")
+            except subprocess.CalledProcessError as fallback_e:
+                print(f"❌ 备用构建也失败: {fallback_e}")
+                return None
+        
         return None
 
 def test_binary(binary_path):
