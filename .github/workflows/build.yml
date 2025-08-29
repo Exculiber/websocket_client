@@ -93,6 +93,43 @@ jobs:
       with:
         path: artifacts
 
+    - name: Prepare release files
+      run: |
+        echo "📁 整理发布文件..."
+        mkdir -p release_files
+        
+        # 复制二进制文件
+        for artifact_dir in artifacts/*/; do
+          if [ -d "$artifact_dir" ]; then
+            echo "处理: $artifact_dir"
+            
+            # 复制 dist 目录下的二进制文件
+            if [ -d "$artifact_dir/dist" ]; then
+              for binary in "$artifact_dir/dist"/websocket-probe-*; do
+                if [ -f "$binary" ]; then
+                  filename=$(basename "$binary")
+                  echo "📦 复制二进制文件: $filename"
+                  cp "$binary" "release_files/$filename"
+                fi
+              done
+            fi
+            
+            # 复制 release 目录
+            if [ -d "$artifact_dir/release-"* ]; then
+              for release_dir in "$artifact_dir/release-"*; do
+                if [ -d "$release_dir" ]; then
+                  dirname=$(basename "$release_dir")
+                  echo "📁 复制发布目录: $dirname"
+                  cp -r "$release_dir" "release_files/"
+                fi
+              done
+            fi
+          fi
+        done
+        
+        echo "📋 发布文件列表:"
+        ls -la release_files/
+
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
@@ -111,6 +148,6 @@ jobs:
           
         draft: false
         prerelease: false
-        files: artifacts/**/*
+        files: release_files/**
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
