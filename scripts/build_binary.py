@@ -220,6 +220,21 @@ def build_binary():
                 print(f"🚀 备用命令: {' '.join(fallback_cmd)}")
                 result = subprocess.run(fallback_cmd, check=True, capture_output=False)
                 print("✅ 备用构建成功！")
+                
+                # 显示构建结果
+                platform_name, machine, ext = get_platform_info()
+                binary_name = f'websocket_probe{ext}'
+                binary_path = os.path.join('dist', binary_name)
+                
+                if os.path.exists(binary_path):
+                    size = os.path.getsize(binary_path)
+                    size_mb = size / (1024 * 1024)
+                    print(f"📦 二进制文件: {binary_path}")
+                    print(f"📏 文件大小: {size_mb:.1f} MB")
+                    return binary_path
+                else:
+                    print("❌ 未找到生成的二进制文件")
+                    return None
             except subprocess.CalledProcessError as fallback_e:
                 print(f"❌ 备用构建也失败: {fallback_e}")
                 return None
