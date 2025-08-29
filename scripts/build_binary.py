@@ -287,11 +287,12 @@ def test_binary(binary_path):
         print(f"❌ 二进制文件测试异常: {e}")
         return False
 
-def create_release_package():
+def create_release_package(binary_path=None):
     """创建发布包"""
-    platform_name, machine, ext = get_platform_info()
-    binary_name = f'websocket-probe-{platform_name}-{machine}{ext}'
-    binary_path = os.path.join('dist', binary_name)
+    if binary_path is None:
+        platform_name, machine, ext = get_platform_info()
+        binary_name = f'websocket-probe-{platform_name}-{machine}{ext}'
+        binary_path = os.path.join('dist', binary_name)
     
     if not os.path.exists(binary_path):
         print("❌ 二进制文件不存在，无法创建发布包")
@@ -378,7 +379,7 @@ def main():
             return 1
     
     # 创建发布包
-    release_dir = create_release_package()
+    release_dir = create_release_package(binary_path)
     if not release_dir:
         print("❌ 创建发布包失败")
         return 1
