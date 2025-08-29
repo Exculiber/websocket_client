@@ -231,6 +231,14 @@ def build_binary():
                     size_mb = size / (1024 * 1024)
                     print(f"📦 二进制文件: {binary_path}")
                     print(f"📏 文件大小: {size_mb:.1f} MB")
+                    
+                    # 重命名为标准格式，确保与 spec 文件生成的名称一致
+                    standard_name = f'websocket-probe-{platform_name}-{machine}{ext}'
+                    standard_path = os.path.join('dist', standard_name)
+                    if binary_path != standard_path:
+                        shutil.move(binary_path, standard_path)
+                        print(f"🔄 重命名为: {standard_name}")
+                        return standard_path
                     return binary_path
                 else:
                     print("❌ 未找到生成的二进制文件")

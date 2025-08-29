@@ -98,6 +98,9 @@ jobs:
         echo "📁 整理发布文件..."
         mkdir -p release_files
         
+        echo "🔍 检查 artifacts 目录结构:"
+        find artifacts -type f -name "websocket-probe*" | head -20
+        
         # 复制二进制文件
         for artifact_dir in artifacts/*/; do
           if [ -d "$artifact_dir" ]; then
@@ -105,13 +108,16 @@ jobs:
             
             # 复制 dist 目录下的二进制文件
             if [ -d "$artifact_dir/dist" ]; then
+              echo "  📁 发现 dist 目录"
               for binary in "$artifact_dir/dist"/websocket-probe-*; do
                 if [ -f "$binary" ]; then
                   filename=$(basename "$binary")
-                  echo "📦 复制二进制文件: $filename"
+                  echo "  📦 复制二进制文件: $filename"
                   cp "$binary" "release_files/$filename"
                 fi
               done
+            else
+              echo "  ❌ 未发现 dist 目录"
             fi
             
             # 复制 release 目录
@@ -119,16 +125,23 @@ jobs:
               for release_dir in "$artifact_dir/release-"*; do
                 if [ -d "$release_dir" ]; then
                   dirname=$(basename "$release_dir")
-                  echo "📁 复制发布目录: $dirname"
+                  echo "  📁 复制发布目录: $dirname"
                   cp -r "$release_dir" "release_files/"
                 fi
               done
             fi
+            
+            # 检查是否有其他可能的二进制文件
+            echo "  🔍 检查整个目录:"
+            find "$artifact_dir" -type f -name "*.exe" -o -name "websocket*" | head -10
           fi
         done
         
         echo "📋 发布文件列表:"
         ls -la release_files/
+        
+        echo "📊 文件统计:"
+        find release_files -type f | wc -l
 
     - name: Create Release
       uses: softprops/action-gh-release@v1
